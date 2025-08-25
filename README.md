@@ -1,6 +1,6 @@
-# Principles of Programming Languages (PL 2024)
+# Principles of Programming Languages (PL 2025)
 
-[![Codeberg](https://img.shields.io/badge/Codeberg-2185D0?style=for-the-badge&logo=codeberg&logoColor=white)](https://codeberg.org/alexhkurz/programming-languages-2024/)
+[![Codeberg](https://img.shields.io/badge/Codeberg-2185D0?style=for-the-badge&logo=codeberg&logoColor=white)](https://codeberg.org/alexhkurz/programming-languages-2025/)
 
 The repository for Chapman University's CPSC 354 Programming Languages.
 
@@ -15,7 +15,7 @@ The repository for Chapman University's CPSC 354 Programming Languages.
 This course will be different from any other course you are going to take in computer science. Here are some of the reasons why:
 
 - This course is about the principles underlying all programming languages (and not about a particular programming language). [^lambda]
-- You will learn how to make your own programming language. [^interpreter]
+- You will learn how to make your own programming language.
 - We emphasize how to write code that is easy to maintain and provably correct (and not how to write code that is efficient). [^efficiency]
 - You will learn how to use recursion instead of iteration. [^recursion]
 - We will emphasize functional programming over imperative programming. [^functional]
@@ -33,8 +33,6 @@ This course will be different from any other course you are going to take in com
 -->
 
 [^lambda]: To this end we will study the smallest Turing complete programming language, lambda calculus, and conceptualize all other languages as extensions of lambda calculus. (Footnote: Some languages like C and C++ add enough features to lambda calculus so that they can then disallow higher-order functions.)
-
-[^interpreter]: We start with L#2024, the language we developed in Programming Languages 2024, and then extend it with new features. Having said this, we will see (at least glimpses of)many languages such as Python, Lean, Javascript, Haskell, OCaml, Latex, Markdown, bash, Scratch/Blockly, etc. 
 
 [^efficiency]: Of course, efficiency (for example in compiler optimization) is also important in programming languages. But it is, in general, a good strategy to first design for correctness and then understand an efficient program as a refinement of a correct program.
 
