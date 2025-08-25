@@ -5,6 +5,7 @@
 The repository for Chapman University's CPSC 354 Programming Languages.
 
 - Quick links
+    - [Lecture by Lecture](lecture-by-lecture.md)
     - [Syllabus](syllabus-long.md)
     - [Report](report.md)
     - [Participation](participation.md)
