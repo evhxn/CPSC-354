@@ -10,6 +10,7 @@ The repository for Chapman University's CPSC 354 Programming Languages.
     - [Report](report.md)
     - [Participation](participation.md)
     - [Git best practices](git-best-practices.md)
+    - Canvas: [Section 1,2](https://canvas.chapman.edu/courses/77921), [Section 3](https://canvas.chapman.edu/courses/77925)
 
 ## What we will do
 
