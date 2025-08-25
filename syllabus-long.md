@@ -4,7 +4,9 @@
 - Lectures: 
   - 354-01: TuTh 1:00 PM - 2:15PM, Keck 153 (Jonathan) 
   - 354-02: TuTh 2:30 PM - 3:45PM, Keck 153 (Jonathan)
-  - 354-03: TuTh 11:30AM - 12:45PM, Keck 156 (Alexander), OH TuTh 230-4, Swenson N205
+    - OH tba
+  - 354-03: TuTh 11:30AM - 12:45PM, Keck 156 (Alexander)
+    - OH TuTh 230-4, Swenson N205
 
 ## Course Description 
 
