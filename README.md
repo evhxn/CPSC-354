@@ -2,18 +2,13 @@
 
 [![Codeberg](https://img.shields.io/badge/Codeberg-2185D0?style=for-the-badge&logo=codeberg&logoColor=white)](https://codeberg.org/alexhkurz/programming-languages-2024/)
 
-In the syllabus, the title of the course is CPSC 354 Programming Languages.
+The repository for Chapman University's CPSC 354 Programming Languages.
 
 - Quick links
-    - [Schedule](schedule.md)
     - [Syllabus](syllabus-long.md)
     - [Report](report.md)
     - [Participation](participation.md)
     - [Git best practices](git-best-practices.md)
-
----
-
-(under construction for 2025):
 
 ## What we will do
 

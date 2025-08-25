@@ -4,15 +4,11 @@ The report will be written in $\LaTeX$ (https://www.latex-project.org/). A templ
 
 ## Teaching Rationale
 
-(new for 2025)
-
 "*Learning is the process of creating knowledge.*" (Kolb & Kolb)
 
 "*Creativity is just connecting things. When you ask creative people how they did something, they feel a little guilty, because they didn’t really do it, they just saw something. It seemed obvious to them after a while. That’s because they were able to connect experiences they’ve had and synthesize new things.*" (Pentland)
 
 The purpose of the report is to help students to grow from learners of a specified curriculum to independent explorers of a subject area. Accordingly, the report will not only contain solutions to homework (skill drill) but also document the student's own explorations around the theme of the course as well as an essay synthesizing what they learned during their explorations.
-
-(tbc)
 
 ## Installing Latex
 
@@ -61,7 +57,7 @@ Out of a total of 200 points the report is worth 90 points and divided approxima
 - (4 points): Quality of writing, style, references.
 - (13x2=26 points): 2 points per week for timely submission of homework.
 - (13x3=39): 3 points per week for quality of homework in the full report.
-- (12 points:) Lessons from the Group Assignments and Project.
+- (12 points:) Essay.
 - (3 points): Conclusion. 
 
 ## Writing of the Report

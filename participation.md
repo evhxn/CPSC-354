@@ -1,7 +1,5 @@
 # Participation
 
-(with updates for 2025)
-
 Participation is activity by students that helps to improve the course. 
 
 In total, there are 10 participation points that can be obtained through a combination of the following activties. Each of these activities is worth 2 points:
