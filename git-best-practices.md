@@ -1,5 +1,7 @@
 # On the Use of Git
 
+![](https://imgs.xkcd.com/comics/git.png)
+
 https://xkcd.com/1597/
 
 [Git](https://en.wikipedia.org/wiki/Git) is a version control software created by Linus Torvalds (also responsible for giving us Linux). There are different commercial implementations of git. Even though, as some say, the [time has come to give up GitHub](https://sfconservancy.org/blog/2022/jun/30/give-up-github-launch/), the following notes still refer to [Github](https://github.com/). There is also a [lawsuit against Github](https://githubcopilotinvestigation.com/) which is motivated by Github building its success on becoming the repository of open source software development and then, as some claim, abusing the trust that open source developers brought to the platform. We found [Codeberg](https://codeberg.org/) a viable alternative to Github, see also [Resources to Give Up GitHub](https://sfconservancy.org/GiveUpGitHub/).
