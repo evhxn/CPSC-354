@@ -2,11 +2,11 @@
 - Class: CPSC-354 Programming Languages, Fall 2025 (all sections)
 - Instructors: [Alexander Kurz](https://alexhkurz.github.io/), [Jonathan Weinberger](https://sites.google.com/view/jonathanweinberger)
 - Lectures: 
-  - 354-01: TuTh 1:00 PM - 2:15PM, Keck 153 (Jonathan) 
-  - 354-02: TuTh 2:30 PM - 3:45PM, Keck 153 (Jonathan)
-    - OH tba
+  - 354-01: TuTh 1:00 PM - 2:15 PM, Keck 153 (Jonathan) 
+  - 354-02: TuTh 2:30 PM - 3:45 PM, Keck 153 (Jonathan)
+    - OH: W 10:30 AM - 12 PM, Swenson 3rd floor; F 9:30 AM - 11 AM, Swenson N206
   - 354-03: TuTh 11:30AM - 12:45PM, Hashinger 111 (Alexander)
-    - OH TuTh 230-4, Swenson N205
+    - OH: TuTh 230-4, Swenson N205
 
 ## Course Description 
 
