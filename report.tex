@@ -11,12 +11,14 @@
 \usepackage{color}
 \usepackage{parskip}
 \usepackage{hyperref}
+\usepackage{float}
+\usepackage[section]{placeins}
   \hypersetup{
     colorlinks = true,
-    urlcolor = blue,       % color of external links using \href
-    linkcolor= blue,       % color of internal links 
-    citecolor= blue,       % color of links to bibliography
-    filecolor= blue,        % color of file links
+    urlcolor = blue,
+    linkcolor= blue,
+    citecolor= blue,
+    filecolor= blue,
     }
     
 \usepackage{listings}
@@ -48,11 +50,11 @@
   {\topsep}   % ABOVESPACE
   {\topsep}   % BELOWSPACE
   {\itshape\/}  % BODYFONT
-  {0pt}       % INDENT (empty value is the same as 0pt)
+  {0pt}       % INDENT
   {\bfseries} % HEADFONT
   {.}         % HEADPUNCT
   {5pt plus 1pt minus 1pt} % HEADSPACE
-  {}          % CUSTOM-HEAD-SPEC
+  {}
 \theoremstyle{theorem} 
    \newtheorem{theorem}{Theorem}[section]
    \newtheorem{corollary}[theorem]{Corollary}
@@ -83,6 +85,9 @@
 
 \section{Week by Week}\label{homework}
 
+% =========================
+% Week 1 
+% =========================
 \subsection{Week 1}
 
 \textbf{Lecture Summary}
@@ -159,6 +164,120 @@ $MU$ contains zero $I$’s, hence $\varphi(MU)=0$. By Proposition~\ref{prop:inva
 \end{tikzpicture}
 \end{center}
 \textbf{Question:} If the MU-puzzle shows that some goals are unreachable due to invariants (like the mod-3 property of I’s), how does this idea connect to undecidability in programming languages?
+
+\FloatBarrier
+
+% =========================
+% Week 2 
+% =========================
+\subsection{Week 2}
+
+\textbf{Lecture Summary} \\
+We introduced \emph{Abstract Reduction Systems (ARS)}: a pair $(A,R)$ with one-step reduction $R\subseteq A\times A$. Key notions:
+reducible/normal form, joinability, confluence, termination, and unique normal forms.
+
+\bigskip
+\textbf{Homework Part 2: The 8 Combinations}
+
+We provide an example ARS for each combination of
+$(\text{confluent}, \text{terminating}, \text{unique NFs})$.
+If a row is impossible, we explain why.
+
+\begin{center}
+\begin{tabular}{|c|c|c|l|}
+\hline
+\textbf{Confluent} & \textbf{Terminating} & \textbf{Unique NFs} & \textbf{Example} \\
+\hline
+True  & True  & True  & $A=\{a\},\ R=\emptyset$ (Fig.~\ref{fig:combo-ttt}) \\
+True  & True  & False & \emph{Impossible} \\
+True  & False & True  & $A=\{a,b\},\ R=\{(a,a),(a,b)\}$ (Fig.~\ref{fig:combo-tft}) \\
+True  & False & False & $A=\{a\},\ R=\{(a,a)\}$ (Fig.~\ref{fig:combo-tff}) \\
+False & True  & True  & \emph{Impossible} \\
+False & True  & False & $A=\{a,b,c\},\ R=\{(a,b),(a,c)\}$ (Fig.~\ref{fig:combo-ftf}) \\
+False & False & True  & \emph{Impossible} \\
+False & False & False & $A=\{a,b,c\},\ R=\{(a,b),(a,c),(b,b),(c,c)\}$ (Fig.~\ref{fig:combo-fff}) \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent\textit{Why some rows are impossible.}
+If an ARS has unique normal forms, it must be confluent.
+If an ARS is both confluent and terminating, then every element reduces to a unique normal form.
+Therefore the rows \((\text{T},\text{T},\text{F})\), \((\text{F},\text{T},\text{T})\), and \((\text{F},\text{F},\text{T})\) cannot occur.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[->,>=stealth',node distance=3cm,auto]
+  \tikzstyle{obj}=[circle,draw,minimum size=9mm]
+  \node[obj] (a) {$a$};
+\end{tikzpicture}
+\caption{Combination (True, True, True). Terminating, confluent, unique NF.}
+\label{fig:combo-ttt}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[->,>=stealth',node distance=3cm,auto]
+  \tikzstyle{obj}=[circle,draw,minimum size=9mm]
+  \node[obj] (a) {$a$};
+  \node[obj] (b) [right=of a] {$b$};
+  \path (a) edge (b)
+        (a) edge[loop above] (a);
+\end{tikzpicture}
+\caption{Combination (True, False, True). Non-terminating, confluent, unique NF $b$.}
+\label{fig:combo-tft}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[->,>=stealth',node distance=3cm,auto]
+  \tikzstyle{obj}=[circle,draw,minimum size=9mm]
+  \node[obj] (a) {$a$};
+  \path (a) edge[loop right] (a);
+\end{tikzpicture}
+\caption{Combination (True, False, False). Non-terminating, confluent, no normal form.}
+\label{fig:combo-tff}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[->,>=stealth',node distance=3.2cm,auto]
+  \tikzstyle{obj}=[circle,draw,minimum size=9mm]
+  \node[obj] (a) {$a$};
+  \node[obj] (b) [right=of a,yshift=10pt] {$b$};
+  \node[obj] (c) [right=of a,yshift=-10pt] {$c$};
+  \path (a) edge (b)
+        (a) edge (c);
+\end{tikzpicture}
+\caption{Combination (False, True, False). Terminating, not confluent; two distinct normal forms $b,c$ are not joinable.}
+\label{fig:combo-ftf}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[->,>=stealth',node distance=3.2cm,auto]
+  \tikzstyle{obj}=[circle,draw,minimum size=9mm]
+  \node[obj] (a) {$a$};
+  \node[obj] (b) [right=of a,yshift=10pt] {$b$};
+  \node[obj] (c) [right=of a,yshift=-10pt] {$c$};
+  \path (a) edge (b)
+        (a) edge (c)
+        (b) edge[loop right] (b)
+        (c) edge[loop right] (c);
+\end{tikzpicture}
+\caption{Combination (False, False, False). Non-terminating (loops), not confluent, no unique normal forms.}
+\label{fig:combo-fff}
+\end{figure}
+
+\FloatBarrier
+
+\noindent\paragraph{Conclusion.}
+The MU-puzzle illustrates how invariants prove impossibility in a formal system.
+The ARS framework provides the general language to study rewrite systems via termination, confluence, and normal forms.
+The 8-combination analysis shows which behaviors are possible and which are structurally impossible.
+
+\noindent\paragraph{Question:}
+Could there be a general framework that unifies invariants with confluence and termination, so that impossibility and determinism appear as two sides of the same rewriting theory?
 
 \section{Essay}
 
