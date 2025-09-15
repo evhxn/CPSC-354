@@ -251,7 +251,7 @@ Therefore the rows \((\text{T},\text{T},\text{F})\), \((\text{F},\text{T},\text{
 \end{tikzpicture}
 \caption{Combination (False, True, False). Terminating, not confluent; two distinct normal forms $b,c$ are not joinable.}
 \label{fig:combo-ftf}
-\end{figure}
+`\end{figure}
 
 \begin{figure}[H]
 \centering
@@ -279,7 +279,87 @@ The 8-combination analysis shows which behaviors are possible and which are stru
 \noindent\paragraph{Question:}
 Could there be a general framework that unifies invariants with confluence and termination, so that impossibility and determinism appear as two sides of the same rewriting theory?
 
-\section{Essay}
+\subsection{Week 3}
+\textbf{Lecture Summary}
+\\TBD
+
+\textbf{Homework 3}
+\paragraph{Exercise 5}
+
+Consider an ARS with
+[
+A = {a,b}^* = {\varepsilon, a, b, aa, ab, ba, bb, aaa, \dots },
+]
+and rewrite rules
+[
+ab \to ba, \qquad 
+ba \to ab, \qquad 
+aa \to \varepsilon, \qquad 
+b \to \varepsilon.
+]
+
+\begin{enumerate}
+   \textbf{Reduce some example strings such as $abba$ and $bababa$.}
+  \begin{align}
+    abba &\to aa \to \varepsilon, \
+    bababa &\to aaa \to a.
+  \end{align}
+
+   \textbf{Find two strings that are not equivalent. How many non-equivalent strings can you find?}
+  \begin{itemize}
+    \item $\varepsilon$
+    \item $a$
+  \end{itemize}
+  These have different normal forms and cannot be transformed into each other.
+
+   \textbf{How many equivalence classes does $\stackrel{\ast}{\longleftrightarrow}$ have? What are the normal forms?} \
+  There are two equivalence classes:
+  \begin{enumerate}
+    \item Strings whose normal form is $\varepsilon$,
+    \item Strings whose normal form is $a$.
+  \end{enumerate}
+  The class is determined by the parity of the number of $a$’s in the string.
+
+   \textbf{Can you modify the ARS so that it becomes terminating without changing its equivalence classes?} \
+  Yes. Remove one of the first two rules. They only permute $a$ and $b$ and do not affect equivalence classes, but having both makes the system non-terminating.
+
+   \textbf{Question.} \
+If I remove all the $b$’s from a string, does the remaining word reduce to $a$ or to $\varepsilon$?”  
+\ans\ This can be answered using the ARS because $b \to \varepsilon$ always deletes $b$’s, and the final result depends only on whether the number of $a$’s left is odd or even. Odd $\mapsto a$, even $\mapsto \varepsilon$.
+
+\end{enumerate}
+\paragraph{Exercise 5b}
+
+Now replace the rule $aa \to \varepsilon$ with $aa \to a$.
+
+\begin{enumerate}
+  \item \textbf{Reduce some example strings such as $abba$ and $bababa$.}
+  \begin{align}
+    abba &\to aa \to a, \
+    bababa &\to aaa \to aa \to a.
+  \end{align}
+
+  \item \textbf{Find two strings that are not equivalent.}
+  \begin{itemize}
+    \item $\varepsilon$
+    \item $a$
+  \end{itemize}
+
+   \textbf{How many equivalence classes are there? What are the normal forms?} \
+  There are two equivalence classes:
+  \begin{enumerate}
+    \item Strings with no $a$’s $;\to;$ normal form $\varepsilon$,
+    \item Strings with at least one $a$ $;\to;$ normal form $a$.
+  \end{enumerate}
+
+ \textbf{Modify the ARS to make it terminating.} \
+  As above, remove one of the two swapping rules $ab \leftrightarrow ba$.
+
+   \textbf{Question:} \
+  Is the system confluent? That is, if a string can be reduced in two different ways, do the reductions always lead to the same normal form?
+
+\end{enumerate}
+
 
 \section{Evidence of Participation}
 
