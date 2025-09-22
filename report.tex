@@ -323,7 +323,7 @@ b \to \varepsilon.
    \textbf{Can you modify the ARS so that it becomes terminating without changing its equivalence classes?} \
   Yes. Remove one of the first two rules. They only permute $a$ and $b$ and do not affect equivalence classes, but having both makes the system non-terminating.
 
-   \textbf{Question.} \
+   \textbf{Question:} \\
 If I remove all the $b$’s from a string, does the remaining word reduce to $a$ or to $\varepsilon$?”  
 \ans\ This can be answered using the ARS because $b \to \varepsilon$ always deletes $b$’s, and the final result depends only on whether the number of $a$’s left is odd or even. Odd $\mapsto a$, even $\mapsto \varepsilon$.
 
@@ -360,6 +360,89 @@ Now replace the rule $aa \to \varepsilon$ with $aa \to a$.
 
 \end{enumerate}
 
+\subsection{Week 4}
+\textbf{Lecture Summary}
+\\An \emph{invariant} is a function or property that remains unchanged under the rewriting relation of an ARS. 
+They are central tools across science (e.g.\ conservation laws in physics, chemistry, and biology) and mathematics. 
+Formally, $P:A\to B$ is an invariant if $a\to b \Rightarrow P(a)=P(b)$. 
+Strong invariants preserve exact equality, while weak invariants preserve truth of properties. 
+Invariants induce partitions on $A$, often serving as abstractions of the equivalence relation $\leftrightarrow^\ast$. 
+They can be used to prove impossibility (show $P(a)=\text{true}$, $P(b)=\text{false}$) and to build \emph{complete invariants}, which fully classify equivalence classes. 
+Examples include letter counts in string rewriting systems and parity arguments in puzzles (domino tilings, sliding puzzles). 
+In programming, invariants explain correctness of while-loops and recursion, while measure functions guarantee termination.
+
+
+\textbf{Homework 4.1}\\
+\textbf{Algorithm}
+\begin{verbatim}
+while b != 0:
+  temp = b
+  b = a mod b
+  a = temp
+return a
+\end{verbatim}
+
+\paragraph{Conditions under which it always terminates.}
+Assume \(a,b\in\mathbb{N}\) with \(b\ge 0\). If \(b=0\) the loop does not run and the program returns immediately. If \(b>0\) then each loop iteration is well defined and yields a strictly smaller nonnegative \(b\) because \(a \bmod b\in\{0,1,\dots,b-1\}\). Thus the loop must terminate. (Equivalently: Euclid’s algorithm terminates for all nonnegative integers, not both zero.)
+
+\paragraph{Measure function and proof.}
+Let the state be the pair \((a,b)\in\mathbb{N}^2\). Define
+\[
+\phi(a,b)=b.
+\]
+Suppose the guard holds, so \(b>0\). One loop step computes
+\[
+(a',b')=(b,\; a\bmod b).
+\]
+Then \(0\le b' < b\), hence \(\phi(a',b')=b' < b=\phi(a,b)\).
+Therefore \(\phi\) strictly decreases on every iteration while staying in \(\mathbb{N}\). Since \(>\) on \(\mathbb{N}\) is well founded, no infinite descent exists, so the loop terminates.
+
+\textbf{Homework 4.2}\\
+\textbf{Fragment}
+\begin{verbatim}
+function merge_sort(arr, left, right):
+  if left >= right:
+    return
+  mid = (left + right) / 2   // integer division
+  merge_sort(arr, left, mid)
+  merge_sort(arr, mid+1, right)
+  merge(arr, left, mid, right)
+\end{verbatim}
+
+\paragraph{Claim.}
+\(\displaystyle \phi(left,right)=right-left+1\) is a measure function for the recursive calls of \texttt{merge\_sort}.
+
+\paragraph{Proof.}
+We reason about the domain \(D=\{(l,r)\in\mathbb{Z}^2 \mid l\le r\}\) with the measure \(\phi(l,r)=r-l+1\in\mathbb{N}\).
+
+If \(left\ge right\) then \(\phi(left,right)\in\{0,1\}\) and the function returns, so there is no recursive descent.
+
+Assume \(left<right\). Let \(mid=\lfloor (left+right)/2\rfloor\). Standard bounds give
+\[
+left \le mid < right \quad\text{and}\quad left < mid+1 \le right.
+\]
+Hence both subranges are valid:
+\[
+(left,mid)\in D, \qquad (mid+1,right)\in D.
+\]
+Their measures satisfy
+\[
+\phi(left,mid)=mid-left+1 \le \left\lfloor\frac{left+right}{2}\right\rfloor-left+1
+< \frac{left+right}{2}-left+1
+= \frac{right-left+2}{2} \le right-left,
+\]
+so \(\phi(left,mid) \le right-left < right-left+1=\phi(left,right)\). Similarly,
+\[
+\phi(mid+1,right)=right-(mid+1)+1=right-mid
+\le right-\left\lfloor\frac{left+right}{2}\right\rfloor
+< right-\frac{left+right}{2}
+= \frac{right-left}{2}
+< right-left+1=\phi(left,right).
+\]
+Thus each recursive argument strictly decreases the measure \(\phi\). Since \(\phi\) takes values in \(\mathbb{N}\) and strictly decreases along every recursion chain, the recursion is well founded and \texttt{merge\_sort} terminates.
+
+\textbf{Question:} \\
+We can discovered that Euclid’s algorithm always stops. But how could you use an invariant to also show that it actually gives the greatest common divisor, not just any number?
 
 \section{Evidence of Participation}
 
