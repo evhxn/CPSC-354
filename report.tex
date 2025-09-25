@@ -444,6 +444,58 @@ Thus each recursive argument strictly decreases the measure \(\phi\). Since \(\p
 \textbf{Question:} \\
 We can discovered that Euclid’s algorithm always stops. But how could you use an invariant to also show that it actually gives the greatest common divisor, not just any number?
 
+\subsection{Week 5}
+\textbf{Lecture Summary}\\
+Lambda calculus is a minimal but Turing-complete language with only three constructs: abstraction ($\lambda x.e$ defines a function), application ($e_1\,e_2$ applies a function to an argument), and variables (simple names without assignment). Application associates to the left and abstraction chains naturally. Computation is substitution: $(\lambda x.M)\,N \rightsquigarrow M[N/x]$ (the $\beta$-rule), with bound variables freely renamable ($\alpha$-equivalence) to avoid capture. Functions can return functions (currying), and using Church encodings, numbers and arithmetic can be represented purely by substitution.
+
+
+\textbf{Homework 5: Lambda Calculus Reduction}\\
+\textbf{We Evaluate:}
+\[
+(\lambda f.\,\lambda x.\, f(f(x))) \; (\lambda f.\,\lambda x.\, f(f(f(x))))
+\]
+\noindent
+\textbf{Step 1: Rename the boud variables of the second term to avoid clashes} 
+\[
+(\lambda f.\,\lambda x.\, f(f(x))) \; (\lambda g.\,\lambda y.\, g(g(g(y))))
+\]
+
+\noindent
+\textbf{Step 2: Apply the outer function to its argument}
+\[
+\lambda x.\, (\lambda g.\,\lambda y.\, g(g(g(y)))) \big( (\lambda g.\,\lambda y.\, g(g(g(y))))\, x \big)
+\]
+
+\noindent
+\textbf{Step 3: Reduce the inner application}
+\[
+\lambda x.\, (\lambda g.\,\lambda y.\, g(g(g(y)))) \, (\lambda y.\, x(x(xy)))
+\]
+
+\noindent
+\textbf{Step 4: Apply again}
+\[
+\lambda x.\,\lambda y.\, (\lambda y.\, x(x(xy))) \big((\lambda y.\, x(x(xy))) \, ((\lambda y.\, x(x(xy)))\, y)\big)
+\]
+
+\noindent
+\textbf{Step 5: Evaluate the nested calls}
+\[
+\lambda x.\,\lambda y.\, x(x(x(x(x(x(x(x(xy)))))))))
+\]
+
+\noindent
+\textbf{Final result.} This is the Church numeral
+\[
+\lambda f.\,\lambda x.\, f^9(x)
+\]
+This is the number $9$ in Church encoding.
+
+\medskip
+\noindent
+\emph{Note:} The workout shows that $2\,3 = 9$ for Church numerals. In general, Church numerals encode repeated function application, and application corresponds to multiplication.
+
+
 \section{Evidence of Participation}
 
 \section{Conclusion}\label{conclusion}
