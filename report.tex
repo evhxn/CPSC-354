@@ -498,6 +498,88 @@ This is the number $9$ in Church encoding.
 \textbf{Question:} If variable names don’t matter in $\lambda$
 -calculus, what does that suggest about how meaning can exist independently of representation?
 
+\subsection{Week 6}
+
+\textbf{Lecture Summary}\\  
+This lecture introduced recursion in the $\lambda$-calculus via the \textit{fixed point combinator}. We learned that recursion can be encoded without special syntax by defining \texttt{fix} such that $\texttt{fix}\ F \to F(\texttt{fix}\ F)$. Using this, one can define recursive functions like factorial. We also reviewed the definitions of \texttt{let} and \texttt{let rec}, which expand into $\lambda$-abstractions and applications of \texttt{fix}. The key point is that recursion in functional languages comes from self-application and fixed points, with the famous $Y$-combinator as a canonical construction.
+
+\textbf{Homework 6: Fixed Points and Recursion}\\
+
+\textbf{Rules:}\\
+\[
+\begin{aligned}
+\texttt{fix}\ F &\;\to\; F\,(\texttt{fix}\ F) \qquad &\textbf{(def of fix)}\\
+\texttt{let}\ x=e_1\ \texttt{in}\ e_2 &\;\to\; (\lambda x.\,e_2)\ e_1 \qquad &\textbf{(def of let)}\\
+\texttt{let rec}\ f=e_1\ \texttt{in}\ e_2 &\;\to\; \texttt{let}\ f=(\texttt{fix}\ (\lambda f.\,e_1))\ \texttt{in}\ e_2 \qquad &\textbf{(def of let rec)}
+\end{aligned}
+\]
+
+\textbf{Abbreviation.}  
+For readability set
+\[
+G \;\equiv\; \lambda f.\,\lambda n.\, \texttt{if}\ n=0\ \texttt{then}\ 1\ \texttt{else}\ n * f(n-1).
+\]
+
+\textbf{Goal term.}
+\[
+\texttt{let rec}\ \texttt{fact} = \lambda n.\, \texttt{if}\ n=0\ \texttt{then}\ 1\ \texttt{else}\ n * \texttt{fact}(n-1)\ \texttt{in}\ \texttt{fact}\ 3
+\]
+
+\textbf{Derivation}
+\[
+\begin{aligned}
+&\texttt{let rec}\ \texttt{fact} = \lambda n.\,\texttt{if}\ n=0\ \texttt{then}\ 1\ \texttt{else}\ n * \texttt{fact}(n-1)\ \texttt{in}\ \texttt{fact}\ 3
+\\
+\to\;& \texttt{let}\ \texttt{fact} = \texttt{fix}\,G\ \texttt{in}\ \texttt{fact}\ 3 \quad \textbf{\small<def of let rec>}
+\\
+\to\;& (\lambda \texttt{fact}.\, \texttt{fact}\ 3)\ (\texttt{fix}\,G) \quad \textbf{\small<def of let>}
+\\
+\to\;& (\texttt{fix}\,G)\ 3 \quad \textbf{\small<}\beta\textbf{-rule>}
+\\
+\to\;& (G(\texttt{fix}\,G))\ 3 \quad \textbf{\small<def of fix>}
+\\
+\to\;& (\lambda n.\, \texttt{if}\ n=0\ \texttt{then}\ 1\ \texttt{else}\ n*(\texttt{fix}\,G)(n-1))\ 3 \quad \textbf{\small<}\beta\textbf{-rule>}
+\\
+\to\;& \texttt{if}\ 3=0\ \texttt{then}\ 1\ \texttt{else}\ 3 * (\texttt{fix}\,G)(2) \quad \textbf{\small<}\beta\textbf{-rule>}
+\\
+\to\;& 3 * (\texttt{fix}\,G)(2) \quad \textbf{\small<def of if>}
+\\
+\to\;& 3 * \big(G(\texttt{fix}\,G)\big)\ 2 \quad \textbf{\small<def of fix>}
+\\
+\to\;& 3 * (\lambda n.\,\texttt{if}\ n=0\ \texttt{then}\ 1\ \texttt{else}\ n*(\texttt{fix}\,G)(n-1))\ 2 \quad \textbf{\small<}\beta\textbf{-rule>}
+\\
+\to\;& 3 * (\texttt{if}\ 2=0\ \texttt{then}\ 1\ \texttt{else}\ 2*(\texttt{fix}\,G)(1)) \quad \textbf{\small<}\beta\textbf{-rule>}
+\\
+\to\;& 3 * (2 * (\texttt{fix}\,G)(1)) \quad \textbf{\small<def of if>}
+\\
+\to\;& 3 * (2 * (G(\texttt{fix}\,G))\ 1) \quad \textbf{\small<def of fix>}
+\\
+\to\;& 3 * (2 * (\lambda n.\,\texttt{if}\ n=0\ \texttt{then}\ 1\ \texttt{else}\ n*(\texttt{fix}\,G)(n-1))\ 1) \quad \textbf{\small<}\beta\textbf{-rule>}
+\\
+\to\;& 3 * (2 * (\texttt{if}\ 1=0\ \texttt{then}\ 1\ \texttt{else}\ 1*(\texttt{fix}\,G)(0))) \quad \textbf{\small<}\beta\textbf{-rule>}
+\\
+\to\;& 3 * (2 * (1 * (\texttt{fix}\,G)(0))) \quad \textbf{\small<def of if>}
+\\
+\to\;& 3 * (2 * (1 * (G(\texttt{fix}\,G))\ 0)) \quad \textbf{\small<def of fix>}
+\\
+\to\;& 3 * (2 * (1 * (\lambda n.\,\texttt{if}\ n=0\ \texttt{then}\ 1\ \texttt{else}\ n*(\texttt{fix}\,G)(n-1))\ 0)) \quad \textbf{\small<}\beta\textbf{-rule>}
+\\
+\to\;& 3 * (2 * (1 * (\texttt{if}\ 0=0\ \texttt{then}\ 1\ \texttt{else}\ 0*(\texttt{fix}\,G)(-1)))) \quad \textbf{\small<}\beta\textbf{-rule>}
+\\
+\to\;& 3 * (2 * (1 * 1)) \quad \textbf{\small<def of if>}
+\\
+\to\;& 3 * (2 * 1) \quad \textbf{\small<arith>}
+\\
+\to\;& 3 * 2 \quad \textbf{\small<arith>}
+\\
+\to\;& 6 \quad \textbf{\small<arith>}
+\end{aligned}
+\]
+
+\textbf{Result:} \texttt{fact 3} reduces to $6$, each step justified by \textbf{def of let rec}, \textbf{def of let}, \(\beta\)\textbf{-rule}, \textbf{def of fix}, \textbf{def of if}, and \textbf{arith}.
+
+\textbf{Question:} Since the fixed point combinator allows functions to call themselves without being named, what does this suggest about the nature of recursion and whether naming is essential for defining self-reference?
+
 \section{Evidence of Participation}
 
 \section{Conclusion}\label{conclusion}
