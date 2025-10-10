@@ -12,6 +12,8 @@
 \usepackage{parskip}
 \usepackage{hyperref}
 \usepackage{float}
+\usepackage{forest}
+
 \usepackage[section]{placeins}
   \hypersetup{
     colorlinks = true,
@@ -579,6 +581,111 @@ G \;\equiv\; \lambda f.\,\lambda n.\, \texttt{if}\ n=0\ \texttt{then}\ 1\ \textt
 \textbf{Result:} \texttt{fact 3} reduces to $6$, each step justified by \textbf{def of let rec}, \textbf{def of let}, \(\beta\)\textbf{-rule}, \textbf{def of fix}, \textbf{def of if}, and \textbf{arith}.
 
 \textbf{Question:} Since the fixed point combinator allows functions to call themselves without being named, what does this suggest about the nature of recursion and whether naming is essential for defining self-reference?
+
+\subsection{Week 7}\\
+\textbf{Lecture Summary}\\
+This lecture introduced parsing and context-free grammars (CFGs) using the calculator example. Parsing was explained as the process of turning concrete syntax (strings) into abstract syntax (trees). We saw how CFG rules capture precedence and associativity, and how parse trees differ from simplified abstract syntax trees (ASTs). Lisp was discussed as a language where programmers essentially write abstract syntax directly. \\
+
+\textbf{Homework: Parse Trees for Arithmetic Expressions}
+
+\textbf{1. Expression: $2+1$}
+
+\begin{forest}
+[Exp
+  [Exp
+    [Exp1
+      [Exp2
+        [Integer [2]]]]]
+  [+]
+  [Exp1
+    [Exp2
+      [Integer [1]]]]]
+\end{forest}
+
+\textbf{2. Expression: $1+2*3$}
+
+\begin{forest}
+[Exp
+  [Exp
+    [Exp1
+      [Exp2
+        [Integer [1]]]]]
+  [+]
+  [Exp1
+    [Exp1
+      [Exp2 [Integer [2]]]]
+    [*]
+    [Exp2 [Integer [3]]]]]
+\end{forest}
+
+\textbf{3. Expression: $1+(2*3)$}
+
+\begin{forest}
+[Exp
+  [Exp
+    [Exp1
+      [Exp2
+        [Integer [1]]]]]
+  [+]
+  [Exp1
+    [Exp2
+      [(]
+        [Exp
+          [Exp1
+            [Exp1
+              [Exp2 [Integer [2]]]]
+            [*]
+            [Exp2 [Integer [3]]]]]
+      [)]]]]
+\end{forest}
+
+\textbf{4. Expression: $(1+2)*3$}
+
+\begin{forest}
+[Exp
+  [Exp1
+    [Exp1
+      [Exp2
+        [(]
+          [Exp
+            [Exp
+              [Exp1
+                [Exp2 [Integer [1]]]]]
+            [+]
+            [Exp1
+              [Exp2 [Integer [2]]]]]
+        [)]]]
+    [*]
+    [Exp2 [Integer [3]]]]]
+\end{forest}
+
+
+\textbf{5. Expression: $1+2*3+4*5+6$}
+
+\begin{forest}
+[Exp
+  [Exp
+    [Exp
+      [Exp1 [Exp2 [Integer [1]]]]
+      [+]
+      [Exp1
+        [Exp1 [Exp2 [Integer [2]]]]
+        [*]
+        [Exp2 [Integer [3]]]]]
+    [+]
+    [Exp1
+      [Exp1 [Exp2 [Integer [4]]]]
+      [*]
+      [Exp2 [Integer [5]]]]]
+  [+]
+  [Exp1
+    [Exp2 [Integer [6]]]]]
+\end{forest}
+
+\textbf{Question:} If Lisp lets programmers write abstract syntax directly, what does this reveal about the trade-offs between readability for humans and ease of parsing for machines?
+
+
+
 
 \section{Evidence of Participation}
 
