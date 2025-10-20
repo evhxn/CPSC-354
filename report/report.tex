@@ -57,7 +57,7 @@
   {.}         % HEADPUNCT
   {5pt plus 1pt minus 1pt} % HEADSPACE
   {}
-\theoremstyle{theorem} 
+\theoremstyle{plain} 
    \newtheorem{theorem}{Theorem}[section]
    \newtheorem{corollary}[theorem]{Corollary}
    \newtheorem{lemma}[theorem]{Lemma}
@@ -280,7 +280,6 @@ The 8-combination analysis shows which behaviors are possible and which are stru
 
 \noindent\paragraph{Question:}
 Could there be a general framework that unifies invariants with confluence and termination, so that impossibility and determinism appear as two sides of the same rewriting theory?
-
 \subsection{Week 3}
 \textbf{Lecture Summary}
 \\TBD
@@ -289,32 +288,32 @@ Could there be a general framework that unifies invariants with confluence and t
 \paragraph{Exercise 5}
 
 Consider an ARS with
-[
-A = {a,b}^* = {\varepsilon, a, b, aa, ab, ba, bb, aaa, \dots },
-]
+\[
+A = \{a,b\}^* = \{\varepsilon, a, b, aa, ab, ba, bb, aaa, \dots \}
+\]
 and rewrite rules
-[
+\[
 ab \to ba, \qquad 
 ba \to ab, \qquad 
 aa \to \varepsilon, \qquad 
-b \to \varepsilon.
-]
+b \to \varepsilon
+\]
 
 \begin{enumerate}
-   \textbf{Reduce some example strings such as $abba$ and $bababa$.}
-  \begin{align}
-    abba &\to aa \to \varepsilon, \
-    bababa &\to aaa \to a.
-  \end{align}
+  \item \textbf{Reduce some example strings such as $abba$ and $bababa$.}
+  \[
+    abba \to aa \to \varepsilon, \qquad
+    bababa \to aaa \to a
+  \]
 
-   \textbf{Find two strings that are not equivalent. How many non-equivalent strings can you find?}
+  \item \textbf{Find two strings that are not equivalent. How many non-equivalent strings can you find?}
   \begin{itemize}
     \item $\varepsilon$
     \item $a$
   \end{itemize}
   These have different normal forms and cannot be transformed into each other.
 
-   \textbf{How many equivalence classes does $\stackrel{\ast}{\longleftrightarrow}$ have? What are the normal forms?} \
+  \item \textbf{How many equivalence classes does $\stackrel{\ast}{\longleftrightarrow}$ have? What are the normal forms?} \\
   There are two equivalence classes:
   \begin{enumerate}
     \item Strings whose normal form is $\varepsilon$,
@@ -322,24 +321,25 @@ b \to \varepsilon.
   \end{enumerate}
   The class is determined by the parity of the number of $a$’s in the string.
 
-   \textbf{Can you modify the ARS so that it becomes terminating without changing its equivalence classes?} \
+  \item \textbf{Can you modify the ARS so that it becomes terminating without changing its equivalence classes?} \\
   Yes. Remove one of the first two rules. They only permute $a$ and $b$ and do not affect equivalence classes, but having both makes the system non-terminating.
 
-   \textbf{Question:} \\
-If I remove all the $b$’s from a string, does the remaining word reduce to $a$ or to $\varepsilon$?”  
-\ans\ This can be answered using the ARS because $b \to \varepsilon$ always deletes $b$’s, and the final result depends only on whether the number of $a$’s left is odd or even. Odd $\mapsto a$, even $\mapsto \varepsilon$.
+  \item \textbf{Question:} \\
+  If I remove all the $b$’s from a string, does the remaining word reduce to $a$ or to $\varepsilon$?  
 
+  \textbf{Answer:} This can be answered using the ARS because $b \to \varepsilon$ always deletes $b$’s, and the final result depends only on whether the number of $a$’s left is odd or even. Odd $\mapsto a$, even $\mapsto \varepsilon$.
 \end{enumerate}
+
 \paragraph{Exercise 5b}
 
 Now replace the rule $aa \to \varepsilon$ with $aa \to a$.
 
 \begin{enumerate}
   \item \textbf{Reduce some example strings such as $abba$ and $bababa$.}
-  \begin{align}
-    abba &\to aa \to a, \
-    bababa &\to aaa \to aa \to a.
-  \end{align}
+  \[
+    abba \to aa \to a, \qquad
+    bababa \to aaa \to aa \to a
+  \]
 
   \item \textbf{Find two strings that are not equivalent.}
   \begin{itemize}
@@ -347,19 +347,18 @@ Now replace the rule $aa \to \varepsilon$ with $aa \to a$.
     \item $a$
   \end{itemize}
 
-   \textbf{How many equivalence classes are there? What are the normal forms?} \
+  \item \textbf{How many equivalence classes are there? What are the normal forms?} \\
   There are two equivalence classes:
   \begin{enumerate}
-    \item Strings with no $a$’s $;\to;$ normal form $\varepsilon$,
-    \item Strings with at least one $a$ $;\to;$ normal form $a$.
+    \item Strings with no $a$’s $\mapsto$ normal form $\varepsilon$,
+    \item Strings with at least one $a$ $\mapsto$ normal form $a$.
   \end{enumerate}
 
- \textbf{Modify the ARS to make it terminating.} \
+  \item \textbf{Modify the ARS to make it terminating.} \\
   As above, remove one of the two swapping rules $ab \leftrightarrow ba$.
 
-   \textbf{Question:} \
+  \item \textbf{Question:} \\
   Is the system confluent? That is, if a string can be reduced in two different ways, do the reductions always lead to the same normal form?
-
 \end{enumerate}
 
 \subsection{Week 4}
@@ -683,6 +682,59 @@ This lecture introduced parsing and context-free grammars (CFGs) using the calcu
 \end{forest}
 
 \textbf{Question:} If Lisp lets programmers write abstract syntax directly, what does this reveal about the trade-offs between readability for humans and ease of parsing for machines?
+
+\subsection{Week 8}
+\textbf{Lecture Summary}
+
+This lecture introduced formal proofs in Lean using the natural numbers tutorial world. We practiced rewriting with lemmas such as \texttt{add\_zero} and \texttt{add\_succ}, and learned how to control which occurrence gets rewritten. The exercises illustrated how even simple arithmetic like $2 + 2 = 4$ requires careful step-by-step rewriting when starting from the axioms of Peano arithmetic. The key insight is that Lean forces us to be explicit about each rule application, which deepens our understanding of how proofs are built from small definitional steps.
+
+\textbf{Homework 8: Lean Tutorial World (Levels 5--8)}
+
+\textit{Level 5.} Prove $a + (b + 0) + (c + 0) = a + b + c$.
+
+\begin{verbatim}
+rw [add_zero c]
+rw [add_zero]
+rfl
+\end{verbatim}
+
+\textit{Level 6.} Prove $succ n = n + 1$.
+
+\begin{verbatim}
+rw [one_eq_succ_zero]
+rw [add_succ]
+rw [add_zero]
+rfl
+\end{verbatim}
+
+\textit{Level 7.} Prove $2 + 2 = 4$.
+
+\begin{verbatim}
+rw [two_eq_succ_one]
+rw [add_succ]
+rw [one_eq_succ_zero]
+rw [add_succ]
+rw [add_zero]
+rw [four_eq_succ_three]
+rw [three_eq_succ_two]
+rw [two_eq_succ_one]
+rw [one_eq_succ_zero]
+rfl
+\end{verbatim}
+
+\textit{Level 8 (alternative short proof).} Another valid solution using \texttt{nth\_rewrite} and reversed rewrites.
+
+\begin{verbatim}
+nth_rewrite 2 [two_eq_succ_one]
+rw [add_succ]
+rw [one_eq_succ_zero]
+rw [add_succ, add_zero]
+rw [← three_eq_succ_two]
+rw [← four_eq_succ_three]
+rfl
+\end{verbatim}
+
+\textbf{Question:} When Lean forces us to spell out each small step (like showing $2 + 2 = 4$ from the Peano axioms), it reveals how much structure is hidden in even basic arithmetic. What does this suggest about the trade-off between human mathematical intuition (where $2 + 2 = 4$ is obvious) and machine-checked rigor (where nothing is obvious until proved)?
 
 
 
