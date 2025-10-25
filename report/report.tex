@@ -736,6 +736,58 @@ rfl
 
 \textbf{Question:} When Lean forces us to spell out each small step (like showing $2 + 2 = 4$ from the Peano axioms), it reveals how much structure is hidden in even basic arithmetic. What does this suggest about the trade-off between human mathematical intuition (where $2 + 2 = 4$ is obvious) and machine-checked rigor (where nothing is obvious until proved)?
 
+\subsection{Week 9}
+\textbf{Lecture Summary}
+
+This lecture focused on proving properties of addition using associativity and commutativity. We learned how Lean allows us to move brackets with \texttt{add\_assoc} and reorder terms with \texttt{add\_comm}, avoiding induction in many cases. At the same time, we also practiced writing an inductive proof, showing how different proof strategies can establish the same result. The key takeaway is that structural lemmas like associativity and commutativity make proofs shorter and more direct, but induction remains a powerful general method.
+
+\textbf{Homework 9: Lean Tutorial World (Level 5)}
+
+\textit{Goal:} Prove $(a + b) + c = a + (c + b)$.
+
+---
+
+\textit{Solution 1 (without induction).}
+
+\begin{verbatim}
+rw [add_assoc]
+rw [add_comm b c]
+rw [add_assoc]
+rfl
+\end{verbatim}
+
+\textbf{Mathematical proof:}  
+Starting with $(a + b) + c$, by associativity we have $a + (b + c)$.  
+By commutativity of addition, this equals $a + (c + b)$.  
+By associativity again, this is $(a + c) + b$, which proves the equality.
+
+---
+
+\textit{Solution 2 (with induction).}
+
+\begin{verbatim}
+induction c with d hd,
+{ rw [add_zero], rw [add_zero], rfl },
+{ rw [add_succ], rw [add_succ], rw hd, rfl }
+\end{verbatim}
+
+\textbf{Mathematical proof:}  
+We prove by induction on $c$ that $(a + b) + c = a + (c + b)$ for all $a, b$.  
+
+\underline{Base case:} $c = 0$.  
+$(a + b) + 0 = a + b = a + (0 + b)$, since $0$ is the additive identity.  
+
+\underline{Inductive step:} Assume $(a + b) + d = a + (d + b)$.  
+For $c = succ(d)$,  
+\[
+(a + b) + succ(d) = succ((a + b) + d) = succ(a + (d + b)) = a + succ(d + b).
+\]  
+Thus the equality holds for $c = succ(d)$.  
+
+By induction, the theorem is proven.
+
+
+\textbf{Question:} What does the fact that we can prove the same result either by induction or by using associativity and commutativity suggest about different proof strategies? How does this illustrate the balance between general methods (like induction, which always work but can be longer) and specialized algebraic lemmas (which are shorter but depend on already-proven properties)?
 
 
 
