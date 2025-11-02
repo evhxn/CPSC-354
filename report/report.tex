@@ -789,6 +789,46 @@ By induction, the theorem is proven.
 
 \textbf{Question:} What does the fact that we can prove the same result either by induction or by using associativity and commutativity suggest about different proof strategies? How does this illustrate the balance between general methods (like induction, which always work but can be longer) and specialized algebraic lemmas (which are shorter but depend on already-proven properties)?
 
+\subsection{Week 10}
+\textbf{Lecture Summary}
+
+This week’s lecture expanded on the logical foundations of \textit{implication and function composition} within Lean. We explored how implications can be treated as functions, and how conjunctions interact with them using constructs like currying, uncurrying, distribution, and transitivity. The lecture emphasized writing concise one-line proofs using Lean’s functional syntax, showing that logical reasoning can be expressed as elegant, composable code. By the end, we understood how higher-level logical structures like nested implications and conjunctions can be modeled and proven through Lean’s type system.
+
+\textbf{Homework 10: Lean Tutorial World (``Party Snacks'') — Levels 6--9}
+
+Each of the following levels was solved in a single line of code:
+
+\textit{Level 6 — and\_imp}
+\begin{verbatim}
+exact fun hc hd => h (hc, hd)
+\end{verbatim}
+
+\textit{Level 7 — and\_imp 2}
+\begin{verbatim}
+exact fun hcd => h hcd.left hcd.right
+\end{verbatim}
+
+\textit{Level 8 — Distribute}
+\begin{verbatim}
+exact fun hs => ⟨h.left hs, h.right hs⟩
+\end{verbatim}
+
+\textit{Level 9 — Uncertain Snacks}
+\begin{verbatim}
+exact fun hr => ⟨fun _ => hr, fun _ => hr⟩
+\end{verbatim}
+
+Each level illustrated a key logical transformation:
+\begin{itemize}
+    \item \textbf{Level 6:} Combined two assumptions to satisfy a conjunction-based implication.
+    \item \textbf{Level 7:} Reversed the logic of Level 6 through uncurrying.
+    \item \textbf{Level 8:} Demonstrated how implication distributes over conjunction.
+    \item \textbf{Level 9:} Constructed nested functions to represent universal truth under multiple conditions.
+\end{itemize}
+
+\textbf{Discord Question}
+
+How does Lean internally represent implications like $P \to Q \to R$ --- is it interpreted as a curried function $(P \to (Q \to R))$, and if so, what are the advantages of this structure when constructing proofs using tactics like \texttt{exact} and \texttt{fun}?
 
 
 \section{Evidence of Participation}
