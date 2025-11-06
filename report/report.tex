@@ -826,9 +826,46 @@ Each level illustrated a key logical transformation:
     \item \textbf{Level 9:} Constructed nested functions to represent universal truth under multiple conditions.
 \end{itemize}
 
-\textbf{Discord Question}
+\textbf{Question:} How does Lean internally represent implications like $P \to Q \to R$ --- is it interpreted as a curried function $(P \to (Q \to R))$, and if so, what are the advantages of this structure when constructing proofs using tactics like \texttt{exact} and \texttt{fun}?
 
-How does Lean internally represent implications like $P \to Q \to R$ --- is it interpreted as a curried function $(P \to (Q \to R))$, and if so, what are the advantages of this structure when constructing proofs using tactics like \texttt{exact} and \texttt{fun}?
+
+\subsection{Week 11}
+
+\textbf{Lecture Summary}
+
+This week introduced deeper reasoning with negation and its interaction with implications, conjunctions, and contradiction. We explored how negated statements behave in Lean, especially how \texttt{False} acts as an eliminator that can produce evidence of any proposition. A focus was placed on manipulating implications whose conclusions are negations, using \texttt{False.elim} to derive results from contradictions, and understanding multilayered negations such as $\neg\neg\neg A$. Concepts like the contrapositive, double negation introduction, and proof by contradiction were reinforced through the falsification tutorial world. By the end of the week, we were able to construct higher-order proofs involving functions that produce contradictions when given the appropriate assumptions.
+
+\textbf{Homework 11: Tutorial World (``Falsification'') — Levels 9--12}
+
+Each solution is exactly one line of Lean code.
+
+\textit{Level 9: Implies a Negation}  
+Goal: \(\neg (P \land A)\)
+\[
+\texttt{exact fun hPA => h (hPA.right)}
+\]
+
+\textit{Level 10: Conjunction Implication}  
+Goal: \(P \to \neg A\)
+\[
+\texttt{exact fun p a => h (And.intro p a)}
+\]
+
+\textit{Level 11: Triple Negation}  
+Goal: \(\neg A\)
+\[
+\texttt{exact fun a => h (fun \_ => a)}
+\]
+
+\textit{Level 12: Negation Intro Boss}  
+Goal: \(\neg\neg B\)
+\[
+\texttt{exact fun nB => h (fun b => False.elim (nB b))}
+\]
+
+
+\textbf{Question:} When proving a goal of the form $\neg P$ in Lean, is it always better to use the \texttt{intro} tactic to assume $P$ and derive \texttt{False}, or are there situations where constructing the lambda function manually is preferable? How does Lean decide which inference rule to use when multiple contradictions could theoretically be formed?
+
 
 
 \section{Evidence of Participation}
