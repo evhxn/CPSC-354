@@ -866,6 +866,84 @@ Goal: \(\neg\neg B\)
 
 \textbf{Question:} When proving a goal of the form $\neg P$ in Lean, is it always better to use the \texttt{intro} tactic to assume $P$ and derive \texttt{False}, or are there situations where constructing the lambda function manually is preferable? How does Lean decide which inference rule to use when multiple contradictions could theoretically be formed?
 
+\subsection{Week 12}
+
+\textbf{Lecture Summary}
+
+This week introduced recursion as a problem solving technique through the Towers of Hanoi puzzle. We compared two computational models: the Stack Machine, where indentation represents recursive stack frames, and the Rewriting Machine, where the same computation is written as equation rewrites using semicolons and parentheses. The goal was to see how a simple recursive definition generates a full call tree and how the execution order differs visually from the logical structure of the program. Understanding this helps clarify how recursive programs unfold and how they relate to iterative counterparts using explicit stacks.
+
+\textbf{Homework 12: Towers of Hanoi}
+
+\textit{Filling in the missing blanks}
+
+\begin{verbatim}
+hanoi 5 0 2
+    hanoi 4 0 1
+        hanoi 3 0 2
+            hanoi 2 0 1
+                hanoi 1 0 2 = move 0 2
+                move 0 1
+                hanoi 1 2 1 = move 2 1
+            move 0 2
+            hanoi 2 1 2
+                hanoi 1 1 0 = move 1 0
+                move 1 2
+                hanoi 1 0 2 = move 0 2
+        move 0 1
+        hanoi 3 2 1
+            hanoi 2 2 0
+                hanoi 1 2 0 = move 2 0
+                move 2 1
+                hanoi 1 0 1 = move 0 1
+            move 2 1
+            hanoi 2 0 2
+                hanoi 1 0 2 = move 0 2
+                move 0 1
+                hanoi 1 1 2 = move 1 2
+    move 0 2
+    hanoi 4 1 2
+        hanoi 3 1 0
+            hanoi 2 1 2
+                hanoi 1 1 2 = move 1 2
+                move 1 0
+                hanoi 1 2 0 = move 2 0
+            move 1 0
+            hanoi 2 2 1
+                hanoi 1 2 1 = move 2 1
+                move 2 0
+                hanoi 1 0 1 = move 0 1
+        move 1 2
+        hanoi 3 0 2
+            hanoi 2 0 1
+                hanoi 1 0 2 = move 0 2
+                move 0 1
+                hanoi 1 2 1 = move 2 1
+            move 0 2
+            hanoi 2 1 2
+                hanoi 1 1 0 = move 1 0
+                move 1 2
+                hanoi 1 0 2 = move 0 2
+\end{verbatim}
+
+\textit{Number of occurrences of ``hanoi''.}
+
+The trace contains \(31\) occurrences.  
+In general: \(\;H(n) = 2^n - 1\).
+
+\textit{Move sequence.}
+
+Extracting the \texttt{move x y} lines gives the correct \(2^5 - 1 = 31\)-move solution.
+
+\textit{Stack vs Rewriting Machine.}
+
+Indentation levels in the stack machine correspond to parentheses depth in the rewriting machine. Both traverse the same call tree.
+
+\textit{Divide and Build (method).}
+
+Divide: move the top \(n-1\) disks to the spare peg.  
+Build: move the largest disk, then rebuild the \(n-1\) tower.
+
+\textbf{Question:}  In both the Stack Machine and Rewriting Machine computations, we are traversing the same recursive call tree. Why does one representation make the control flow clearer, while the other makes the algebraic structure clearer? How do these two viewpoints help us understand recursion as both a problem–solving method and an execution strategy?
 
 
 \section{Evidence of Participation}
