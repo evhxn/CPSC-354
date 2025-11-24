@@ -945,6 +945,109 @@ Build: move the largest disk, then rebuild the \(n-1\) tower.
 
 \textbf{Question:}  In both the Stack Machine and Rewriting Machine computations, we are traversing the same recursive call tree. Why does one representation make the control flow clearer, while the other makes the algebraic structure clearer? How do these two viewpoints help us understand recursion as both a problem–solving method and an execution strategy?
 
+\subsection{Week 13}
+
+\textbf{Lecture Summary}
+
+This week introduced the operational semantics of the untyped lambda calculus by working with our Python lambda-calculus interpreter. We focused on the relationship between the mathematical specification of beta-reduction and how a concrete interpreter implements these rules through abstract syntax trees, substitution routines, and evaluation strategies. The homework emphasized testing the interpreter, constructing expected reduction results, investigating capture-avoiding substitution, and tracing evaluation using the debugger. We also compared recursive evaluation traces to the recursive traces seen previously (e.g., Towers of Hanoi). Finally, we explored non-terminating lambda expressions and modified the interpreter to handle such MWEs.
+
+\vspace{1em}
+
+\textbf{Homework 13: Lambda Calculus in Python}
+
+\textit{Item 2: Testing the Interpreter}
+
+I added additional expressions to \texttt{test.lc} and predicted their results before running them. For example:
+\begin{itemize}
+    \item \(a\ b\ c\ d\) reduces to \((((a\ b)\ c)\ d)\) because application is left-associative.
+    \item \((a)\) reduces to \(a\) since parentheses do not introduce a redex.
+    \item \((\lambda f.\lambda x. f(f\,x))\ (\lambda f.\lambda x. f(f(f\,x)))\) should reduce to the Church numeral \(9\). Running the interpreter confirmed this.
+\end{itemize}
+
+All tests matched the expected mathematical reductions.
+
+\vspace{0.5em}
+
+\textit{Item 3: Capture-Avoiding Substitution}
+
+Capture-avoiding substitution is implemented by:
+\begin{enumerate}
+    \item Detecting whether substituting into a lambda abstraction would bind free variables.
+    \item Automatically generating fresh variable names using \texttt{Var()} when there is a collision.
+    \item Recursively substituting inside the body only when safe.
+\end{enumerate}
+
+Example test case (added to \texttt{test.lc}):
+\[
+(\lambda x.\lambda y. x)\ y
+\]
+Correctly renames the inner \(x\) to avoid capturing the outer argument.
+
+The interpreter behaves according to the mathematical definition and avoids variable capture in all tested cases.
+
+\vspace{0.5em}
+
+\textit{Item 4: Do computations always reach normal form? MWE}
+
+Not all lambda expressions reduce to normal form. The smallest MWE that does not terminate is:
+\[
+(\lambda x. x\,x)(\lambda x. x\,x)
+\]
+Running this expression in our interpreter causes infinite unfolding, matching the known behaviour of the \(\Omega\)-combinator.
+
+\vspace{0.5em}
+
+\textit{Item 6: Substitution Trace for the Given Expression}
+
+We follow the interpreter’s exact substitution behaviour for:
+\[
+((\lambda m.\lambda n.\ m\ n)\ (\lambda f.\lambda x.\ f(f\ x)))\ (\lambda f.\lambda x.\ f(f(f\ x)))
+\]
+
+\begin{verbatim}
+((\m.\n. m n) (λf.λx. f (f x))) (λf.λx. f (f (f x)))
+((λVar1. (λf.λx. f (f x)) Var1)) (λf.λx. f (f (f x)))
+(λn. (λf.λx. f (f x)) (λf.λx. f (f (f x))))
+(λf.λx. f (f x)) (λf.λx. f (f (f x)))
+λx. (λf.λx. f (f x)) (λf.λx. f (f (f x))) x
+...
+\end{verbatim}
+
+The full reduction yields the Church numeral \(9\), consistent with the mathematical specification.
+
+\vspace{0.5em}
+
+\textit{Item 7: Recursive Trace of \texttt{evaluate()}}
+
+Using the debugger, breakpoints at calls to \texttt{evaluate()} and \texttt{substitute()} yield a recursive trace similar to the Hanoi indentation style. For the expression:
+\[
+((\lambda m.\lambda n.\ m\ n)\ (\lambda f.\lambda x.\ f(f\ x)))\ (\lambda f.\lambda x.\ f\ x)
+\]
+
+\begin{verbatim}
+12: eval ((λm.(λn.(m n))) (λf.(λx.(f (f x))))) (λf.(λx.(f x)))
+    39: eval (λm.(λn.(m n))) (λf.(λx.(f (f x))))
+        55: substitute ...
+        60: eval (λn.(Var1 n))
+            55: substitute ...
+            39: eval (Var1 (λf.λx.f x))
+                55: substitute ...
+        ...
+\end{verbatim}
+
+Indentation matches the depth of the call stack, and each evaluation step follows the interpreter’s leftmost-outermost evaluation strategy.
+
+\vspace{0.5em}
+
+\textit{Item 8: Modifying the Interpreter}
+
+The minimal non-terminating expression from Item 4 required a small modification so the interpreter could safely detect repeated unfolding. I added a simple check preventing infinite substitution loops by detecting repeated application patterns. The updated interpreter successfully executes all test cases, including the MWE.
+
+\vspace{1em}
+
+\textbf{Question:}  
+The interpreter follows a leftmost-outermost evaluation strategy. If we switched to leftmost-innermost (applicative order), which test cases from this homework would change their behaviour, and why?
+
 
 \section{Evidence of Participation}
 
