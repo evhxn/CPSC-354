@@ -3,47 +3,39 @@ import os
 from lark import Lark, Transformer
 
 # read grammar
-with open("grammar.lark") as f:
-    _GRAMMAR = f.read()
-parser = Lark(_GRAMMAR, parser="lalr")
-
+parser = Lark(open("grammar.lark").read(), parser="lalr")
 
 # ast builder
 class LambdaCalculusTransformer(Transformer):
     def var(self, args):
-        # variable
         return ('var', str(args[0]))
 
     def lam(self, args):
-        # lambda abstraction
-        name = str(args[0])
-        body = args[1]
-        return ('lam', name, body)
+        return ('lam', str(args[0]), args[1])
 
     def app(self, args):
-        # application
+        # initial application node as given by the parser
         return ('app', args[0], args[1])
 
 
 # pretty printer
-def linearize(t):
+def linearize(t, top=True):
     tag = t[0]
+
     if tag == 'var':
         return t[1]
+
     if tag == 'lam':
-        return f"(\\{t[1]}.{linearize(t[2])})"
+        body = linearize(t[2], top=False)
+        s = f"(\\{t[1]}.{body})"
+        return s if top else s
+
     if tag == 'app':
-        f = t[1]
-        a = t[2]
-        f_str = linearize(f)
-        a_str = linearize(a)
-        # add parens where needed
-        if f[0] == 'lam':
-            f_str = f"({f_str})"
-        if a[0] in ('lam', 'app'):
-            a_str = f"({a_str})"
-        return f"{f_str} {a_str}"
-    # should not happen
+        f = linearize(t[1], top=False)
+        a = linearize(t[2], top=False)
+        s = f"{f} {a}"
+        return s if top else f"({s})"
+
     return "?"
 
 
@@ -65,12 +57,11 @@ class NameGen:
         self.c = 0
 
     def fresh(self, used):
-        # generate x1, x2, x3, ... not in used
         while True:
             self.c += 1
-            name = f"x{self.c}"
-            if name not in used:
-                return name
+            x = f"x{self.c}"
+            if x not in used:
+                return x
 
 
 ng = NameGen()
@@ -80,115 +71,146 @@ ng = NameGen()
 def substitute(t, name, rep):
     tag = t[0]
 
-    # variable
     if tag == 'var':
-        if t[1] == name:
-            return rep
-        return t
+        return rep if t[1] == name else t
 
-    # lambda abstraction
     if tag == 'lam':
         v, body = t[1], t[2]
-
-        # bound variable shadows name
         if v == name:
+            # bound variable shadows the name we want to replace
             return t
-
-        # avoid capture
         if v in free_vars(rep):
-            used = free_vars(body) | free_vars(rep) | {name, v}
-            fresh_v = ng.fresh(used)
-            renamed_body = substitute(body, v, ('var', fresh_v))
-            return ('lam', fresh_v, substitute(renamed_body, name, rep))
-
+            # avoid capture by renaming
+            used = free_vars(body) | free_vars(rep) | {v, name}
+            fresh = ng.fresh(used)
+            renamed = substitute(body, v, ('var', fresh))
+            return ('lam', fresh, substitute(renamed, name, rep))
         return ('lam', v, substitute(body, name, rep))
 
-    # application
     if tag == 'app':
-        return (
-            'app',
-            substitute(t[1], name, rep),
-            substitute(t[2], name, rep),
-        )
+        return ('app',
+                substitute(t[1], name, rep),
+                substitute(t[2], name, rep))
 
     return t
 
 
-# one normal-order reduction step
+# normalize application: make it LEFT-associative
+#
+# Example:
+#   app(a, app(b, app(c, d)))  ==>  app(app(app(a, b), c), d)
+#   (\x.\y.x) a b              ==>  ((\x.\y.x) a) b
+def normalize_applications(t):
+    tag = t[0]
+
+    if tag == 'app':
+        nodes = []
+
+        def collect(u):
+            if u[0] == 'app':
+                collect(u[1])
+                collect(u[2])
+            else:
+                # recursively normalize inside non-app nodes
+                nodes.append(normalize_applications(u))
+
+        collect(t)
+
+        # build left-nested application chain
+        res = nodes[0]
+        for arg in nodes[1:]:
+            res = ('app', res, arg)
+        return res
+
+    if tag == 'lam':
+        return ('lam', t[1], normalize_applications(t[2]))
+
+    # variable or other
+    return t
+
+
+# ONE NORMAL-ORDER STEP
 def step(t):
     tag = t[0]
 
-    # variables are already in normal form
+    # variable – no reduction
     if tag == 'var':
         return t, False
 
-    # reduce under lambda (needed for full normalisation)
+    # lambda – reduce body
     if tag == 'lam':
-        body, did = step(t[2])
-        if did:
-            return ('lam', t[1], body), True
-        return t, False
+        body, changed = step(t[2])
+        return ('lam', t[1], body), changed
 
     # application
     if tag == 'app':
         f, a = t[1], t[2]
 
-        # outermost beta-redex
+        # CASE 1: beta-reduction
         if f[0] == 'lam':
-            param = f[1]
-            body = f[2]
-            return substitute(body, param, a), True
+            v, body = f[1], f[2]
+            return substitute(body, v, a), True
 
-        # otherwise reduce the function first
-        new_f, did = step(f)
-        if did:
+        # CASE 2: reduce function first
+        new_f, changed = step(f)
+        if changed:
             return ('app', new_f, a), True
 
-        # finally reduce the argument
-        new_a, did = step(a)
-        if did:
-            return ('app', f, new_a), True
-
-        return t, False
+        # CASE 3: reduce argument
+        new_a, changed = step(a)
+        return ('app', f, new_a), changed
 
     return t, False
 
 
-# repeat steps until normal form
+MAX_STEPS = 10000  # safety limit to detect non-terminating terms
+
+
+# repeat until no more reductions or we hit the step limit
 def evaluate(t):
-    while True:
-        t2, did = step(t)
-        if not did:
-            return t2
-        t = t2
+    changed = True
+    steps = 0
+    while changed and steps < MAX_STEPS:
+        t, changed = step(t)
+        steps += 1
+
+    if changed:
+        # still reducible but we hit the limit: treat as non-terminating
+        raise RuntimeError("non-terminating")
+
+    return t
 
 
-# parse + eval one expression
-def interpret_expr(src):
+# run interpreter
+def interpret(src):
     cst = parser.parse(src)
     ast = LambdaCalculusTransformer().transform(cst)
-    out = evaluate(ast)
-    return linearize(out)
+
+    # fix associativity of application
+    ast = normalize_applications(ast)
+
+    try:
+        out = evaluate(ast)
+        return linearize(out, top=True)
+    except RuntimeError:
+        # requested behaviour for non-terminating terms
+        return "<non-terminating>"
 
 
 # cli
 def main():
     if len(sys.argv) != 2:
-        print('usage: interpreter.py "(\\x.x) a" or interpreter.py file.lc')
+        print('usage: interpreter.py "<expr>" or interpreter.py file.lc')
         sys.exit(1)
 
     arg = sys.argv[1]
 
     if os.path.isfile(arg):
-        with open(arg) as f:
-            lines = [ln.strip() for ln in f.readlines() if ln.strip()]
-        for i, line in enumerate(lines):
-            result = interpret_expr(line)
-            # one result per line, no extra junk
-            end = "" if i == len(lines) - 1 else "\n"
-            print(result, end=end)
+        src = open(arg).read()
     else:
-        print(interpret_expr(arg))
+        src = arg
+
+    print(interpret(src))
 
 
 if __name__ == "__main__":
