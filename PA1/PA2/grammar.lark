@@ -1,0 +1,16 @@
+?start: expr
+
+?expr: application
+     | abstraction
+     | atom
+
+application: expr expr   -> app
+
+abstraction: "\\" CNAME "." expr   -> lam
+
+?atom: CNAME           -> var
+     | "(" expr ")"
+
+%import common.CNAME
+%import common.WS
+%ignore WS
