@@ -84,12 +84,31 @@
 \tableofcontents
 
 \section{Introduction}\label{intro}
+This report documents my learning throughout CPSC 354: Programming Languages and Computability. 
+The course explores computation from a formal and mathematical perspective, emphasizing the 
+structures, rules, and logical principles that underlie programming languages. Rather than focusing 
+on building software directly, the course approaches programming through rewriting systems, 
+invariants, context-free grammars, proof assistants, and the operational semantics of the 
+lambda calculus. Each week introduced a new conceptual tool for understanding how computation 
+works at a foundational level.
+
+The report is organized chronologically. Section 2 presents weekly summaries of the material, 
+including lecture highlights, homework solutions, and reflective ``interesting questions’’ that 
+connect course topics to larger themes in computation. Section 3 synthesizes the key ideas of 
+the course and relates them to my systems engineering internship, where many of these formal 
+concepts appeared implicitly in logic design, verification, and system behavior analysis. Section 4 
+provides evidence of participation, and Section 5 offers a final reflection on how the course fits 
+into the broader landscape of software engineering.
+
+Overall, this report aims to demonstrate not only mastery of the technical material, but also how 
+formal reasoning, rewriting systems, and logical structure intersect with practical engineering 
+experience. The course gave me new conceptual tools for understanding computation, and these 
+tools continue to shape how I think about programming, correctness, and system design.
 
 \section{Week by Week}\label{homework}
 
-% =========================
 % Week 1 
-% =========================
+
 \subsection{Week 1}
 
 \textbf{Lecture Summary}
@@ -169,9 +188,7 @@ $MU$ contains zero $I$’s, hence $\varphi(MU)=0$. By Proposition~\ref{prop:inva
 
 \FloatBarrier
 
-% =========================
 % Week 2 
-% =========================
 \subsection{Week 2}
 
 \textbf{Lecture Summary} \\
@@ -280,9 +297,21 @@ The 8-combination analysis shows which behaviors are possible and which are stru
 
 \noindent\paragraph{Question:}
 Could there be a general framework that unifies invariants with confluence and termination, so that impossibility and determinism appear as two sides of the same rewriting theory?
+
+% Week 3
 \subsection{Week 3}
 \textbf{Lecture Summary}
-\\TBD
+\\This lecture expanded on string- and term-rewriting techniques and connected the abstract theory of
+reduction systems to practical methods for reasoning about equivalence and normal forms. We
+reviewed the key semantic properties of an abstract reduction system (termination, confluence,
+unique normal forms) and introduced tools for proving or disproving them in concrete string
+rewriting examples. Important results covered include the Church--Rosser / Diamond intuition and
+Newman's lemma (termination plus local confluence implies confluence), and the role of critical
+pairs and joinability when analysing overlapping rewrite rules. The lecture also emphasised
+strategies for finding normal forms (e.g. orienting rules to make a system terminating) and for
+using invariants to prove impossibility or non-equivalence; this prepared us for Homework 3,
+where students experiment with small string rewrite systems and classify equivalence classes by
+their normal forms.
 
 \textbf{Homework 3}
 \paragraph{Exercise 5}
@@ -361,6 +390,7 @@ Now replace the rule $aa \to \varepsilon$ with $aa \to a$.
   Is the system confluent? That is, if a string can be reduced in two different ways, do the reductions always lead to the same normal form?
 \end{enumerate}
 
+% Week 4
 \subsection{Week 4}
 \textbf{Lecture Summary}
 \\An \emph{invariant} is a function or property that remains unchanged under the rewriting relation of an ARS. 
@@ -445,6 +475,8 @@ Thus each recursive argument strictly decreases the measure \(\phi\). Since \(\p
 \textbf{Question:} \\
 We can discovered that Euclid’s algorithm always stops. But how could you use an invariant to also show that it actually gives the greatest common divisor, not just any number?
 
+
+% Week 5
 \subsection{Week 5}
 \textbf{Lecture Summary}\\
 Lambda calculus is a minimal but Turing-complete language with only three constructs: abstraction ($\lambda x.e$ defines a function), application ($e_1\,e_2$ applies a function to an argument), and variables (simple names without assignment). Application associates to the left and abstraction chains naturally. Computation is substitution: $(\lambda x.M)\,N \rightsquigarrow M[N/x]$ (the $\beta$-rule), with bound variables freely renamable ($\alpha$-equivalence) to avoid capture. Functions can return functions (currying), and using Church encodings, numbers and arithmetic can be represented purely by substitution.
@@ -499,6 +531,7 @@ This is the number $9$ in Church encoding.
 \textbf{Question:} If variable names don’t matter in $\lambda$
 -calculus, what does that suggest about how meaning can exist independently of representation?
 
+% Week 6
 \subsection{Week 6}
 
 \textbf{Lecture Summary}\\  
@@ -581,6 +614,7 @@ G \;\equiv\; \lambda f.\,\lambda n.\, \texttt{if}\ n=0\ \texttt{then}\ 1\ \textt
 
 \textbf{Question:} Since the fixed point combinator allows functions to call themselves without being named, what does this suggest about the nature of recursion and whether naming is essential for defining self-reference?
 
+% Week 7
 \subsection{Week 7}\\
 \textbf{Lecture Summary}\\
 This lecture introduced parsing and context-free grammars (CFGs) using the calculator example. Parsing was explained as the process of turning concrete syntax (strings) into abstract syntax (trees). We saw how CFG rules capture precedence and associativity, and how parse trees differ from simplified abstract syntax trees (ASTs). Lisp was discussed as a language where programmers essentially write abstract syntax directly. \\
@@ -683,6 +717,7 @@ This lecture introduced parsing and context-free grammars (CFGs) using the calcu
 
 \textbf{Question:} If Lisp lets programmers write abstract syntax directly, what does this reveal about the trade-offs between readability for humans and ease of parsing for machines?
 
+% Week 8
 \subsection{Week 8}
 \textbf{Lecture Summary}
 
@@ -736,6 +771,7 @@ rfl
 
 \textbf{Question:} When Lean forces us to spell out each small step (like showing $2 + 2 = 4$ from the Peano axioms), it reveals how much structure is hidden in even basic arithmetic. What does this suggest about the trade-off between human mathematical intuition (where $2 + 2 = 4$ is obvious) and machine-checked rigor (where nothing is obvious until proved)?
 
+% Week 9
 \subsection{Week 9}
 \textbf{Lecture Summary}
 
@@ -789,6 +825,7 @@ By induction, the theorem is proven.
 
 \textbf{Question:} What does the fact that we can prove the same result either by induction or by using associativity and commutativity suggest about different proof strategies? How does this illustrate the balance between general methods (like induction, which always work but can be longer) and specialized algebraic lemmas (which are shorter but depend on already-proven properties)?
 
+% Week 10
 \subsection{Week 10}
 \textbf{Lecture Summary}
 
@@ -828,7 +865,7 @@ Each level illustrated a key logical transformation:
 
 \textbf{Question:} How does Lean internally represent implications like $P \to Q \to R$ --- is it interpreted as a curried function $(P \to (Q \to R))$, and if so, what are the advantages of this structure when constructing proofs using tactics like \texttt{exact} and \texttt{fun}?
 
-
+% Week 11
 \subsection{Week 11}
 
 \textbf{Lecture Summary}
@@ -866,6 +903,7 @@ Goal: \(\neg\neg B\)
 
 \textbf{Question:} When proving a goal of the form $\neg P$ in Lean, is it always better to use the \texttt{intro} tactic to assume $P$ and derive \texttt{False}, or are there situations where constructing the lambda function manually is preferable? How does Lean decide which inference rule to use when multiple contradictions could theoretically be formed?
 
+% Week 12
 \subsection{Week 12}
 
 \textbf{Lecture Summary}
@@ -945,6 +983,7 @@ Build: move the largest disk, then rebuild the \(n-1\) tower.
 
 \textbf{Question:}  In both the Stack Machine and Rewriting Machine computations, we are traversing the same recursive call tree. Why does one representation make the control flow clearer, while the other makes the algebraic structure clearer? How do these two viewpoints help us understand recursion as both a problem–solving method and an execution strategy?
 
+% Week 13
 \subsection{Week 13}
 
 \textbf{Lecture Summary}
@@ -1048,13 +1087,97 @@ The minimal non-terminating expression from Item 4 required a small modification
 \textbf{Question:}  
 The interpreter follows a leftmost-outermost evaluation strategy. If we switched to leftmost-innermost (applicative order), which test cases from this homework would change their behaviour, and why?
 
+\section{Essay (Synthesis)}
+
+Throughout this course, I came to see programming languages not merely as tools for writing code but as formal systems governed by structure, rules, and invariants. Each topic, from the MIU puzzle, to abstract reduction systems, to grammars, Lean, and finally the lambda calculus interpreter, revealed a different angle of the same underlying truth: computation is rule-guided symbolic transformation. This perspective not only reshaped my understanding of the mathematical foundations of programming, but also deepened my appreciation for the systems engineering work I performed during my internship this summer.
+
+My internship involved working with safety-critical logic systems such as finite state machines, hardware interfaces, and automated test pipelines. I often had to reason about dependencies, invariants, and system behavior under strict constraints. Questions like ``Will this terminate'', ``Does this always reach the same state'', or ``Can these two processes conflict'' appeared constantly. At the time, these felt like practical engineering problems; through this course, I realized they are precisely the questions studied in confluence, termination, and invariant analysis within ARSs and the lambda calculus.
+
+The MIU puzzle first introduced the idea that impossibility can be demonstrated using invariants. During my internship, traceability matrices, error-state diagrams, and state transition models served the same purpose; they ensured that certain unsafe or undesired system states could never be reached. ARSs then provided a general language for reasoning about these systems, explaining why some designs behave deterministically while others inherently diverge or branch.
+
+We later studied grammars and parsing, which clarified something that consistently appears in systems engineering: structure determines interpretation. Just as precedence rules disambiguate arithmetic expressions, engineering specifications must be structurally precise so that machines interpret them correctly. Understanding grammars helped me recognize why a system’s documentation and interface definitions must be unambiguous.
+
+Lean extended these themes into formal logic. Writing machine-checked proofs required articulating every logical dependency explicitly, something I had previously done informally when debugging or verifying system behavior during my internship. Lean made visible the chain of reasoning behind even simple claims, reinforcing the idea that correctness follows from many small, justified steps.
+
+Finally, studying the lambda calculus brought everything together. Building the Python interpreter mirrored my engineering work: preventing variable capture felt like resolving naming collisions in test frameworks, tracing the evaluator resembled following recursive call stacks in embedded systems, and detecting non-terminating expressions paralleled guarding against infinite loops in automated processes. The need for precise substitution, careful evaluation rules, and consistent scope discipline gave me a concrete appreciation for how interpreters and engineered systems maintain internal logical coherence.
+
+The main insight I gained is that formal reasoning is not separate from engineering practice; it is the underlying structure that makes engineering work at all. The tools from this course, such as invariants, confluence, termination, grammars, proofs, and substitution models, are the same tools used implicitly across real-world systems. This course provided the theoretical foundation beneath the intuition I developed during my internship, and together they have reshaped how I view computation, logic, and the design of reliable systems.
+
 
 \section{Evidence of Participation}
 
+Throughout the semester I actively participated in the course through a combination of online engagement, peer collaboration, and contributions to weekly discussions. My participation included:
+
+\begin{itemize}
+    \item Posting weekly ``interesting questions'' on the Discord channel that connected lecture material to broader themes in computation and systems design.
+    \item Reviewing follow-up graded comments after graded assignments, reflecting on feedback and planning revisions for my final report.
+    \item Engaging in discussions by responding to classmates’ questions and sharing clarifications or examples when relevant.
+    \item Developing additional test cases for the lambda calculus interpreter, including examples involving variable capture, associativity, and non-terminating expressions.
+    \item Exploring alternative proofs and reduction strategies in Lean beyond the minimal required steps, and sharing some of these explorations with classmates.
+    \item Contributing to conversations about parsing, grammars, and evaluation strategies by relating them to practical systems engineering experiences with classmates.
+\end{itemize}
+
+These activities demonstrate consistent participation throughout the semester and engagement with both the technical and conceptual aspects of the course.
+
 \section{Conclusion}\label{conclusion}
+This course offered a unique opportunity to step back from day-to-day programming and examine computation through the lens of formal systems. Many computer science classes focus on building software, but this course focused on understanding the rules, structures, and mathematical constraints that make computation possible in the first place. By doing so, it provided a perspective that reaches far beyond programming languages and into the foundations of software engineering itself.
+
+One of the most valuable aspects of the course was seeing how ideas reappeared across different domains. The MIU puzzle showed how invariants restrict what can be achieved in a rule-based system. ARSs generalized this into questions of confluence and termination, which reappeared in grammars through structural constraints, in Lean through proof normalization, and in the lambda calculus through beta-reduction. The unifying theme is that computation is not arbitrary; it follows precise rules that can be analyzed, predicted, and proven.
+
+Connecting these concepts to the wider world of software engineering was particularly meaningful for me. During my systems engineering internship, I encountered many of the same ideas without realizing it. When designing state machines, verifying safety properties, or analyzing race conditions, I was implicitly working with invariants and reduction rules. When debugging recursive behavior or dealing with infinite loops in automated systems, I was essentially confronting non-termination. When enforcing strict formatting rules in interface documents or machine instructions, I was relying on context-free grammar structure. This course gave formal names, definitions, and theoretical explanations to the challenges I faced in practice.
+
+The most interesting part of the course was building and modifying the lambda calculus interpreter. It served as a bridge between theory and implementation, showing that features we take for granted in programming languages, such as scope, substitution, and evaluation order, are built from surprisingly delicate mechanisms. Implementing capture-avoiding substitution and tracing evaluation with a debugger provided a new appreciation for how interpreters, compilers, and automated tools work internally.
+
+In terms of improvements, the course could benefit from additional examples connecting formal concepts to real software systems. While the theoretical framing is essential, students might gain even more intuition by analyzing real-world scenarios, such as compiler optimizations, configuration languages, or protocol specifications, through the lens of ARSs or grammars. Even small case studies would help reinforce the relevance of the material.
+
+Overall, the course expanded my understanding of computation, connected deeply with my engineering experience, and strengthened my appreciation for the formal rigor that underlies software systems. It provided both the conceptual clarity and the theoretical foundation that will continue to guide how I think about programming, logic, and reliable system design.
+
 
 \begin{thebibliography}{99}
-\bibitem[BLA]{bla} Author, \href{https://en.wikipedia.org/wiki/LaTeX}{Title}, Publisher, Year.
+\bibitem{barendregt}
+H.~Barendregt,
+\textit{The Lambda Calculus: Its Syntax and Semantics}. 
+North-Holland, 1984.
+
+\bibitem{pierce}
+B.~Pierce,
+\textit{Types and Programming Languages}. 
+MIT Press, 2002.
+
+\bibitem{barton}
+C.~Barton,
+\textit{How I Wish I’d Taught Maths}. 
+John Catt Educational, 2018.
+
+\bibitem{lark}
+Lark Parser Documentation, 
+\url{https://github.com/lark-parser/lark}. 
+Accessed 2025.
+
+\bibitem{lean}
+Lean Community,
+\textit{The Natural Number Game and Tutorial World}. 
+\url{https://leanprover-community.github.io/}. 
+Accessed 2025.
+
+\bibitem{python-docs}
+Python Software Foundation,
+\textit{Python 3 Documentation}. 
+\url{https://docs.python.org/3/}. 
+Accessed 2025.
+
+\bibitem{harel}
+D.~Harel,
+``Statecharts: A Visual Formalism for Complex Systems'', 
+\textit{Science of Computer Programming}, 8(3):231–274, 1987.
+
+\bibitem{reactive}
+D.~Harel and A.~Pnueli,
+``On the Development of Reactive Systems'', 
+\textit{Logics and Models of Concurrent Systems}. 
+Springer, 1985.
+
 \end{thebibliography}
+
 
 \end{document}
