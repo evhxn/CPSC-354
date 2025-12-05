@@ -1,0 +1,74 @@
+// Milestone 3: lambda calculus + arithmetic + conditionals + let/letrec + lists
+
+start: expr
+
+// Sequencing has the lowest precedence
+?expr: prog
+     | base_expr
+
+prog: base_expr ";;" expr          -> prog
+
+// Lambda and let bindings
+?base_expr: lam
+          | let
+          | letrec
+          | ifexpr
+          | comparison
+
+lam: "\\" NAME "." base_expr                    -> lam
+let: "let" NAME "=" base_expr "in" base_expr    -> let
+letrec: "letrec" NAME "=" base_expr "in" base_expr   -> letrec
+
+// If-then-else
+ifexpr: "if" base_expr "then" base_expr "else" base_expr  -> ifexpr
+
+// Comparison operators (==, <=)
+?comparison: comparison "==" sum           -> eq
+           | comparison "<=" sum           -> leq
+           | sum
+
+// Addition and subtraction (same precedence, left-associative)
+?sum: sum "+" product      -> plus
+    | sum "-" product      -> minus
+    | product
+
+// Multiplication (tighter than + and -)
+?product: product "*" unary  -> times
+        | unary
+
+// Unary minus (tighter than *, looser than application)
+?unary: "-" unary          -> neg
+      | fix
+
+// Fix operator (between unary and application)
+?fix: "fix" app            -> fix
+    | app
+
+// Function application (tighter than fix, looser than list ops)
+?app: app listop           -> app
+    | listop
+
+// List operations (hd, tl) - operate on cons expressions
+?listop: "hd" listop       -> hd
+       | "tl" listop       -> tl
+       | cons
+
+// Cons (list construction) - tighter than hd/tl, right-associative
+?cons: atom ":" cons       -> cons
+     | atom
+
+// Atoms (tightest)
+?atom: NAME                -> var
+     | NUMBER              -> num
+     | "#"                 -> nil
+     | "(" base_expr ")"
+
+// Tokens
+%import common.CNAME   -> NAME
+%import common.NUMBER  -> NUMBER
+%import common.WS
+%ignore WS
+
+// Line comments: // ...
+COMMENT: "//" /[^\n]*/
+%ignore COMMENT
